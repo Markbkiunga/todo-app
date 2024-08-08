@@ -2,26 +2,28 @@
 import { useState } from "react";
 import InputField from "./InputField";
 import PrimaryButton from "./PrimaryButton";
+import { baseURL, fetchData } from "../FetchData";
 
-const AddTodoForm = ({ todoList, setTodoList }) => {
+const AddTodoForm = () => {
   const [newTodoItem, setNewTodoItem] = useState("");
 
   function handleChange(e) {
     setNewTodoItem(e.target.value);
   }
 
-  function handleSubmit(event) {
+  function addTodoItem(event) {
+    const todo = {
+      title: newTodoItem,
+      completed: false,
+    };
     event.preventDefault();
-    setTodoList([
-      ...todoList,
-      { id: crypto.randomUUID(), title: newTodoItem, completed: false },
-    ]);
+    fetchData(baseURL, "POST", todo);
 
     setNewTodoItem("");
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={addTodoItem}>
       <InputField value={newTodoItem} onChange={handleChange} />
       <PrimaryButton>Add Todo</PrimaryButton>
     </form>
